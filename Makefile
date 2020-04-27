@@ -21,10 +21,15 @@ README.md: bin/gh-md-toc
 covid-19: ## Run covid-19 container
 	docker run \
 		--rm \
+		--detach \
 		--publish 8501:8501 \
 		--name covid-19 \
 		--volume $(shell pwd):/covid-19 \
 		$(image)
+
+.PHONY: remove-covid-19
+remove-covid-19: ## Remove covid-19 container if exit
+	docker rm -f covid-19
 
 .PHONY: image
 image: ## Build covid-19 image

@@ -81,17 +81,17 @@ def make_exposed_infected_line_chart(data: pd.DataFrame, scale="log"):
             data,
             width=600,
             height=400,
-            title="Evolução no tempo de pessoas expostas e infectadas pelo COVID-19",
+            title="Time evolution of people exposed and infected by COVID-19",
         )
         .transform_fold(
             ["Exposed_mean", "Infected_mean"],
-            ["Variável", "Valor"]  # equivalent to id_vars in pandas" melt
+            ["Variable", "Value"]  # equivalent to id_vars in pandas" melt
         )
         .mark_line()
         .encode(
             x=alt.X("Datas:T", axis=alt.Axis(title="Data", labelSeparation=3)),
-            y=alt.Y("Valor:Q", title="Qtde. de pessoas", scale=alt.Scale(type=scale)),
-            color="Variável:N",
+            y=alt.Y("Value:Q", title="Qty. of people", scale=alt.Scale(type=scale)),
+            color="Value:N",
         )
     )
 
@@ -166,7 +166,7 @@ def plot_r0(r0_samples, date, place, min_days):
             data,
             width=600,
             height=150,
-            title=f"Número básico de reprodução para {place}"
+            title=f"Basic reproduction number for {place}"
         )
         .mark_line()
         .encode(
@@ -177,7 +177,7 @@ def plot_r0(r0_samples, date, place, min_days):
 
     band = alt.Chart(data).mark_errorband(extent="stdev").encode(
         x=alt.X("Dias", title="Data"),
-        y=alt.Y("r0", title="Valor"),
+        y=alt.Y("r0", title="Value"),
     )
 
     output = alt.layer(band, line)

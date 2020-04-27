@@ -42,7 +42,7 @@ def prepare_for_r0_estimation(df):
 
 
 @st.cache
-def make_brazil_cases(cases_df):
+def make_nation_cases(cases_df):
     return (cases_df
             .stack(level=1)
             .sum(axis=1)
@@ -78,52 +78,52 @@ def make_param_widgets(NEIR0, r0_samples=None, defaults=DEFAULT_PARAMS):
     family = 'lognorm'
 
     fator_subr = st.sidebar.number_input(
-            ('Fator de subnotificação. Este número irá multiplicar o número de infectados e expostos.'),
+            ('Underreporting factor. This number will multiply the number of infected and exposed.'),
             min_value=1.0, max_value=200.0, step=1.0,
             value=defaults['fator_subr'])
 
-    st.sidebar.markdown('#### Condições iniciais')
-    N = st.sidebar.number_input('População total (N)',
+    st.sidebar.markdown('#### Initial conditions')
+    N = st.sidebar.number_input('Total population (N)',
                                 min_value=0, max_value=1_000_000_000, step=1,
                                 value=_N0)
 
-    E0 = st.sidebar.number_input('Indivíduos expostos inicialmente (E0)',
+    E0 = st.sidebar.number_input('Individuals initially exposed (E0)',
                                  min_value=0, max_value=1_000_000_000,
                                  value=_E0)
 
-    I0 = st.sidebar.number_input('Indivíduos infecciosos inicialmente (I0)',
+    I0 = st.sidebar.number_input('Infectious individuals initially (I0)',
                                  min_value=0, max_value=1_000_000_000,
                                  value=_I0)
 
-    R0 = st.sidebar.number_input('Indivíduos removidos com imunidade inicialmente (R0)',
+    R0 = st.sidebar.number_input('Individuals removed with immunity initially (R0)',
                                  min_value=0, max_value=1_000_000_000,
                                  value=_R0)
 
-    st.sidebar.markdown('#### Período de infecção (1/γ) e tempo incubação (1/α)') 
+    st.sidebar.markdown('#### Infection period (1 / γ) and incubation time (1 / α)')
 
     gamma_inf = st.sidebar.number_input(
-            'Limite inferior do período infeccioso médio em dias (1/γ)',
+            'Lower limit of average infectious period in days (1/γ)',
             min_value=1.0, max_value=60.0, step=1.0,
             value=defaults['gamma_inv_dist'][0])
 
     gamma_sup = st.sidebar.number_input(
-            'Limite superior do período infeccioso médio em dias (1/γ)',
+            'Upper limit of average infectious period in days (1/γ)',
             min_value=1.0, max_value=60.0, step=1.0,
             value=defaults['gamma_inv_dist'][1])
 
     alpha_inf = st.sidebar.number_input(
-            'Limite inferior do tempo de incubação médio em dias (1/α)',
+            'Lower limit of average incubation time in days (1/α)',
             min_value=0.1, max_value=60.0, step=0.1,
             value=defaults['alpha_inv_dist'][0])
 
     alpha_sup = st.sidebar.number_input(
-            'Limite superior do tempo de incubação médio em dias (1/α)',
+            'Upper limit of average incubation time in days (1/α)',
             min_value=0.1, max_value=60.0, step=0.1,
             value=defaults['alpha_inv_dist'][1])
 
-    st.sidebar.markdown('#### Parâmetros gerais') 
+    st.sidebar.markdown('#### General parameters')
 
-    t_max = st.sidebar.number_input('Período de simulação em dias (t_max)',
+    t_max = st.sidebar.number_input('Simulation period in days (t_max)',
                                     min_value=1, max_value=8*30, step=1,
                                     value=180)
 
@@ -214,7 +214,7 @@ def estimate_r0(cases_df, place, sample_size, min_days, w_date):
     if len(incidence) < MIN_DAYS_r0_ESTIMATE:
         used_brazil = True
         incidence = (
-            make_brazil_cases(cases_df)
+            make_nation_cases(cases_df)
             .pipe(prepare_for_r0_estimation)
             [:w_date]
         )
@@ -230,21 +230,21 @@ def estimate_r0(cases_df, place, sample_size, min_days, w_date):
 
 def make_r0_widgets(defaults=DEFAULT_PARAMS):
     r0_inf = st.number_input(
-             'Limite inferior do número básico de reprodução médio (R0)',
+             'Lower limit of basic basic reproduction number (R0)',
              min_value=0.01, max_value=10.0, step=0.25,
              value=defaults['r0_dist'][0])
 
     r0_sup = st.number_input(
-            'Limite superior do número básico de reprodução médio (R0)',
+            'Upper limit of the average basic reproduction number (R0)',
             min_value=0.01, max_value=10.0, step=0.25,
             value=defaults['r0_dist'][1])
     return (r0_inf, r0_sup, .95, 'lognorm')
 
 
 def write():
-    st.markdown("## Modelo Epidemiológico (SEIR-Bayes)")
+    st.markdown("## Epidemiological Model (SEIR-Bayes)")
     st.sidebar.markdown(texts.PARAMETER_SELECTION)
-    w_granularity = st.sidebar.selectbox('Unidade',
+    w_granularity = st.sidebar.selectbox('Unit',
                                          options=['state', 'city'],
                                          index=1,
                                          format_func=global_format_func)
@@ -257,13 +257,13 @@ def write():
                      DEFAULT_STATE)
 
     options_place = make_place_options(cases_df, population_df)
-    w_place = st.sidebar.selectbox('Município',
+    w_place = st.sidebar.selectbox('City',
                                    options=options_place,
                                    index=options_place.get_loc(DEFAULT_PLACE),
                                    format_func=global_format_func)
 
     options_date = make_date_options(cases_df, w_place)
-    w_date = st.sidebar.selectbox('Data inicial',
+    w_date = st.sidebar.selectbox('Initial date',
                                   options=options_date,
                                   index=len(options_date)-1)
     NEIR0 = make_NEIR0(cases_df, population_df, w_place, w_date)
@@ -271,7 +271,7 @@ def write():
     # Estimativa R0
     st.markdown(texts.r0_ESTIMATION_TITLE)
     should_estimate_r0 = st.checkbox(
-            'Estimar R0 a partir de dados históricos',
+            'Estimate R0 from historical data',
             value=True)
     if should_estimate_r0:
         r0_samples, used_brazil = estimate_r0(cases_df,
@@ -288,31 +288,31 @@ def write():
         st.altair_chart(plot_r0(r0_samples, w_date, 
                                 _place, MIN_DAYS_r0_ESTIMATE))
         r0_dist = r0_samples[:, -1]
-        st.markdown(f'*O $R_{{0}}$ estimado está entre '
+        st.markdown(f'*O $R_{{0}}$ estimate is between '
                     f'${np.quantile(r0_dist, 0.01):.03}$ e ${np.quantile(r0_dist, 0.99):.03}$*')
         st.markdown(texts.r0_CITATION)
     else:
         r0_dist = make_r0_widgets()
         st.markdown(texts.r0_ESTIMATION_DONT)
 
-    # Previsão de infectados
+    # Infected prediction
     w_params = make_param_widgets(NEIR0)
     model = SEIRBayes(**w_params, r0_dist=r0_dist)
     model_output = model.sample(SAMPLE_SIZE)
     ei_df = make_EI_df(model, model_output, SAMPLE_SIZE)
     st.markdown(texts.MODEL_INTRO)
-    w_scale = st.selectbox('Escala do eixo Y',
+    w_scale = st.selectbox('Y axis scale',
                            ['log', 'linear'],
                            index=1)
     fig = plot_EI(model_output, w_scale, w_date)
     st.altair_chart(fig)
     download_placeholder = st.empty()
-    if download_placeholder.button('Preparar dados para download em CSV'):
+    if download_placeholder.button('Prepare data for download in CSV'):
         href = make_download_href(ei_df, w_params, r0_dist, should_estimate_r0)
         st.markdown(href, unsafe_allow_html=True)
         download_placeholder.empty()
 
-    # Parâmetros de simulação
+    # Simulation parameters
     dists = [w_params['alpha_inv_dist'],
              w_params['gamma_inv_dist'],
              r0_dist]
@@ -320,12 +320,12 @@ def write():
     params_intro_txt, seir0_dict, other_params_txt = texts.make_SIMULATION_PARAMS(SEIR0, dists,
                                              should_estimate_r0)
     st.markdown(params_intro_txt)
-    st.write(pd.DataFrame(seir0_dict).set_index("Compartimento"))
+    st.write(pd.DataFrame(seir0_dict).set_index("Compartment"))
     st.markdown(other_params_txt)
 
-    # Configurações da simulação
+    # Simulation settings
     st.markdown(texts.SIMULATION_CONFIG)
-    # Fontes dos dados
+    # Data sources
     st.markdown(texts.DATA_SOURCES)
 
 

@@ -74,17 +74,17 @@ def make_exposed_infected_line_chart(source: pd.DataFrame, scale="log"):
             source,
             width=600,
             height=500,
-            title="Evolução no tempo de pessoas expostas e infectadas pelo COVID-19",
+            title="Time evolution of people exposed and infected by COVID-19",
         )
         .transform_fold(
             ["Exposed_mean", "Infected_mean"],
-            ["Variável", "Valor"]  # equivalent to id_vars in pandas' melt
+            ["Variable", "Value"]  # equivalent to id_vars in pandas' melt
         )
         .mark_line()
         .encode(
             x=alt.X("day:Q", title="Dias"),
-            y=alt.Y("Valor:Q", title="Qtde. de pessoas", scale=alt.Scale(type=scale)),
-            color="Variável:N",
+            y=alt.Y("Value:Q", title="Qty. of people", scale=alt.Scale(type=scale)),
+            color="Variable:N",
         )
     )
 

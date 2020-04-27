@@ -1,7 +1,7 @@
 def global_format_func(s):
     fmt = {
-        'state': 'Estado',
-        'city': 'Município'
+        'state': 'State',
+        'city': 'City'
     }
     if s in fmt.keys():
         return fmt[s]

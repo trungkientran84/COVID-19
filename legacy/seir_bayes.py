@@ -90,16 +90,16 @@ def seir_bayes_plot(N, E0, I0, R0,
         f"\tSolve SEIR$(\\alpha, \\gamma, \\beta)$"
     ).format(*gamma_inv_params, *alpha_inv_params, *R0__params)
 
-    title = '(RESULTADO PRELIMINAR) Pessoas afetadas pelo COVID-19, segundo o modelo SEIR-Bayes'
+    title = '(RESULTADO PRELIMINAR) People affected by COVID-19, according to the SEIR-Bayes model'
     plt.style.use('ggplot')
     fig, ax = plt.subplots(figsize=(16,9))
     plt.plot(t_space, E.mean(axis=1), '--', t_space, I.mean(axis=1), '--', marker='o')
     plt.title(title, fontsize=20)
-    plt.legend(['Expostas ($\mu \pm \sigma$)',
-                'Infectadas ($\mu \pm \sigma$)'],
+    plt.legend(['Exposed ($\mu \pm \sigma$)',
+                'Infected ($\mu \pm \sigma$)'],
                fontsize=20, loc='lower right')
-    plt.xlabel('t (Dias a partir de 17/Março/2020)', fontsize=20)
-    plt.ylabel('Pessoas', fontsize=20)
+    plt.xlabel('t (Days from 17 / March / 2020)', fontsize=20)
+    plt.ylabel('People', fontsize=20)
     plt.fill_between(t_space,
                      I.mean(axis=1) + I.std(axis=1), 
                      (I.mean(axis=1) - I.std(axis=1)).clip(I0),

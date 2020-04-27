@@ -67,15 +67,15 @@ if __name__ == '__main__':
      [['E', 'I']]
      .plot(figsize=(16,9), fontsize=20, logy=False, style='o--'))
     title = (
-        'Numero de Pessoas Atingidas com modelo:\n'
+        'Number of People Affected with model:\n'
         f'SEIR-SDE($\gamma$={gamma:.02}, $\\beta$={beta:.02}, $R0$={R0_:.02}, '
         f'$\\alpha$={1/alpha_inv:.02}, $N$={N}, '
         f'$E(0)$={E0}, $I(0)$={I0}, $R(0)$={R0})'
     )
     plt.title(title, fontsize=20)
-    plt.legend(['Expostas ($\pm 3\sigma$)', 'Infectadas ($\pm 3\sigma$)'], fontsize=20)
-    plt.xlabel('Dias (a partir de 16/Março/2020)', fontsize=20)
-    plt.ylabel('Pessoas', fontsize=20)
+    plt.legend(['Exposed ($\pm 3\sigma$)', 'Infected ($\pm 3\sigma$)'], fontsize=20)
+    plt.xlabel('Days (from 16 / March / 2020)', fontsize=20)
+    plt.ylabel('People', fontsize=20)
     plt.fill_between(results.index, 
                      I.mean(axis=1) + 3*I.std(axis=1), 
                      I.mean(axis=1) - 3*I.std(axis=1),

@@ -4,16 +4,16 @@ import pages.seir
 import pages.about
 
 PAGES = {
-    "Modelo epidemiológico": pages.seir,
-    "Sobre o projeto": pages.about,
+    "Epidemiological model": pages.seir,
+    "About the project": pages.about,
 }
 
 
 def main(): 
     st.markdown(pages.utils.texts.INTRODUCTION)
     
-    st.sidebar.markdown("# Navegação")
-    goto = st.sidebar.radio("Ir para", list(PAGES.keys()))
+    st.sidebar.markdown("# Navigation")
+    goto = st.sidebar.radio("Go to", list(PAGES.keys()))
     PAGES[goto].write()
 
 if __name__=="__main__":

@@ -56,9 +56,9 @@ if __name__ == '__main__':
         f'SEIR($\gamma$={gamma}, $\\beta$={beta}, $\\alpha$={1/alpha_inv}, $N$={N}, '
         f'$E_0$={E0}, $I_0$={I0}, $R_0$={R0})'
     )
-    plt.title(f'Numero de Pessoas Atingidas com modelo:\n' + params_title,
+    plt.title(f'Number of People Affected with model:\n' + params_title,
               fontsize=20)
-    plt.legend(['Expostas', 'Infectadas'], fontsize=20)
-    plt.xlabel('Dias', fontsize=20)
-    plt.ylabel('Pessoas', fontsize=20)
+    plt.legend(['Exposed', 'Infected'], fontsize=20)
+    plt.xlabel('Days', fontsize=20)
+    plt.ylabel('People', fontsize=20)
     plt.show()
