@@ -1,5 +1,5 @@
 
-COVID-19
+COVID-19 
 ====
 O objetivo deste repositório é iniciar uma força tarefa conjunta da comunidade científica e tecnológica a fim de organizar dados e criar modelos de previsão de infectados (e talvez outras métricas, entre elas demanda por leitos de internação) pelo COVID-19, focando no Brasil. O projeto é público e pode ser usado por todxs.
 
