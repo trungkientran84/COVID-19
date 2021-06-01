@@ -1,9 +1,9 @@
 pipeline {
   agent any
   stages {
-    stage('Build') {
+    stage('class hudson.model.Build -59
       steps {
-        echo 'Build'
+        echo 'class hudson.model.Build -59
       }
     }
 
